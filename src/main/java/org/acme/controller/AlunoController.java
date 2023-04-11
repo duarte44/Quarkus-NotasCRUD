@@ -9,11 +9,9 @@ import org.acme.service.AlunoService;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validator;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +32,10 @@ public class AlunoController {
     @Path("{id}")
     public Response findById(@PathParam("id") Long id){
         var resposta = alunoService.findById(id);
-        return resposta;
+        if (resposta != null){
+            return Response.ok(resposta).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
     @GET
@@ -62,4 +63,33 @@ public class AlunoController {
         alunoService.insert(obj);
         return Response.status(Response.Status.CREATED.getStatusCode()).build();
     }
+
+    @DELETE
+    @Transactional
+    @Path("{id}")
+    public Response delete(@PathParam("id")Long id){
+        var aluno = alunoService.findById(id);
+
+        if(aluno != null){
+            alunoService.delete(id);
+            return Response.noContent().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @PUT
+    @Path("{id}")
+    @Transactional
+    public Response update(@PathParam("id") Long id, AlunoDTO newAluno){
+        var aluno = alunoService.findById(id);
+
+        if(aluno != null){
+            alunoService.update(id, newAluno);
+            return Response.noContent().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
 }

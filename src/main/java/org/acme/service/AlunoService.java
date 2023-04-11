@@ -6,8 +6,6 @@ import org.acme.repositories.AlunoRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.ws.rs.POST;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -22,9 +20,9 @@ public class AlunoService {
         return alunoRepository.findAll().list();
     }
 
-    public Response findById(Long id){
+    public Aluno findById(Long id){
         var respo = alunoRepository.findById(id);
-        return Response.ok(respo).build();
+        return respo;
 
     }
 
@@ -33,7 +31,7 @@ public class AlunoService {
         return Response.ok(respo).build();
     }
 
-    public Aluno fromDTO(AlunoDTO objDto){
+    public static Aluno fromDTO(AlunoDTO objDto){
         return new Aluno(objDto.getId(), objDto.getNome(), objDto.getN1(), objDto.getN2(), objDto.getN3());
     }
 
@@ -42,5 +40,20 @@ public class AlunoService {
         obj.setId(null);
         alunoRepository.persist(obj);
     }
+
+    public Response update(Long id, AlunoDTO newObj){
+        Aluno obj = alunoRepository.findById(id);
+            updateData(newObj, obj);
+            return Response.noContent().build();
+
+    }
+
+    private void updateData(AlunoDTO newObj, Aluno obj){
+        obj.setNome(newObj.getNome());
+        obj.setN1(newObj.getN1());
+        obj.setN2(newObj.getN2());
+        obj.setN3(newObj.getN3());
+    }
+
 
 }
