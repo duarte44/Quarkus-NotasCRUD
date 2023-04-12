@@ -53,14 +53,15 @@ public class AlunoController {
 
     @POST
     @Transactional
-    public Response insert(AlunoDTO objDTO){
+    @Path("{id}")
+    public Response insert(AlunoDTO objDTO, @PathParam("id") Long id){
 
         Aluno obj = alunoService.fromDTO(objDTO);
         Set<ConstraintViolation<AlunoDTO>> violations = validator.validate(objDTO);
         if(!violations.isEmpty()){
             return ResponseError.createFromValidation(violations).withStatusCode(ResponseError.UNPROCESSABLE_ENTITY_STATUS);
         }
-        alunoService.insert(obj);
+        alunoService.insert(obj, id);
         return Response.status(Response.Status.CREATED.getStatusCode()).build();
     }
 

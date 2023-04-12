@@ -1,13 +1,12 @@
 package org.acme.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -29,7 +28,6 @@ public class Aluno {
     private Double n3;
 
 
-
     public String getResultado(){
         Double m = (n1 + n2 + n3) / 3;
         if(m < 5){
@@ -40,4 +38,9 @@ public class Aluno {
         }
 
     }
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "professor_id")
+    private Professor professor;
 }

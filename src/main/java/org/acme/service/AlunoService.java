@@ -2,7 +2,9 @@ package org.acme.service;
 
 import org.acme.dto.AlunoDTO;
 import org.acme.entity.Aluno;
+import org.acme.entity.Professor;
 import org.acme.repositories.AlunoRepository;
+import org.acme.repositories.ProfessorRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -15,6 +17,8 @@ public class AlunoService {
     @Inject
     AlunoRepository alunoRepository;
 
+    @Inject
+    ProfessorRepository professorRepository;
 
     public List<Aluno> findAll(){
         return alunoRepository.findAll().list();
@@ -32,12 +36,14 @@ public class AlunoService {
     }
 
     public static Aluno fromDTO(AlunoDTO objDto){
-        return new Aluno(objDto.getId(), objDto.getNome(), objDto.getN1(), objDto.getN2(), objDto.getN3());
+        return new Aluno(objDto.getId(), objDto.getNome(), objDto.getN1(), objDto.getN2(), objDto.getN3(), objDto.getProfessor());
     }
 
 
-    public void insert(Aluno obj){
+    public void insert(Aluno obj, Long id){
         obj.setId(null);
+        Professor prof = professorRepository.findById(id);
+        obj.setProfessor(prof);
         alunoRepository.persist(obj);
     }
 

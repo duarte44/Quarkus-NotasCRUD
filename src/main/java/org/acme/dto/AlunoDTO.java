@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.acme.entity.Aluno;
+import org.acme.entity.Professor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,5 +27,7 @@ public class AlunoDTO {
 
     @NotNull(message = "Nota não pode ser nula")
     private Double n3;
+
+    private Professor professor;
 
 }
