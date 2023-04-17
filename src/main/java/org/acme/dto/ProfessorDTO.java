@@ -7,6 +7,7 @@ import org.acme.entity.Aluno;
 
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public class ProfessorDTO {
     @NotBlank(message = "não pode ser nulo")
     private String nome;
 
+    @NotBlank(message = "não pode ser nulo")
     private String materia;
 
     private List<Aluno> alunos;

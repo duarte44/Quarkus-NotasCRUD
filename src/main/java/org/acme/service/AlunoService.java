@@ -9,6 +9,7 @@ import org.acme.repositories.ProfessorRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
+import java.util.Collections;
 import java.util.List;
 
 @ApplicationScoped

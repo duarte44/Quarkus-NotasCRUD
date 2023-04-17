@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,4 +27,6 @@ public class Professor {
 
     @OneToMany(mappedBy = "professor")
     private List<Aluno> alunos;
+
+
 }

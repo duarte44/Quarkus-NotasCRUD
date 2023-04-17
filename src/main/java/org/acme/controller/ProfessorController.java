@@ -7,16 +7,14 @@ import org.acme.dto.ProfessorDTO;
 import org.acme.entity.Aluno;
 import org.acme.entity.Professor;
 import org.acme.exceptions.ResponseError;
+import org.acme.service.AlunoService;
 import org.acme.service.ProfessorService;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +26,9 @@ public class ProfessorController {
 
     @Inject
     ProfessorService professorService;
+
+    @Inject
+    AlunoService alunoService;
 
     @Inject
     Validator validator;
@@ -44,6 +45,30 @@ public class ProfessorController {
         return professores;
     }
 
+
+    @GET
+    @Path("{id}")
+    public Response findById(@PathParam("id") Long id){
+        var respo = professorService.findById(id);
+        if (respo != null){
+            return Response.ok(respo).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Transactional
+    public Response delete(@PathParam("id") Long id){
+        var respo = professorService.findById(id);
+
+        if(respo != null){
+            professorService.delete(id);
+            return Response.noContent().build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
     @POST
     @Transactional
     public Response insert(ProfessorDTO objDTO){
@@ -56,4 +81,20 @@ public class ProfessorController {
         professorService.insert(obj);
         return Response.status(Response.Status.CREATED.getStatusCode()).build();
     }
+
+    @PUT
+    @Path("{id}")
+    @Transactional
+    public Response update(@PathParam("id")Long id, ProfessorDTO newProfessor){
+        var respo = professorService.findById(id);
+
+        if (respo != null){
+            professorService.update(id, newProfessor);
+            return Response.noContent().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+
 }

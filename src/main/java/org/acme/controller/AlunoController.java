@@ -5,6 +5,7 @@ import org.acme.dto.AlunoDTO;
 import org.acme.entity.Aluno;
 import org.acme.exceptions.ResponseError;
 import org.acme.service.AlunoService;
+import org.acme.service.ProfessorService;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -26,6 +27,9 @@ public class AlunoController {
 
     @Inject
     AlunoService alunoService;
+
+    @Inject
+    ProfessorService professorService;
 
 
     @GET
@@ -92,5 +96,7 @@ public class AlunoController {
 
         return Response.status(Response.Status.NOT_FOUND).build();
     }
+
+
 
 }
