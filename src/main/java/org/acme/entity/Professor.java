@@ -10,12 +10,14 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 public class Professor {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +31,14 @@ public class Professor {
     private List<Aluno> alunos;
 
 
+    public Professor(Long id, String nome, String materia) {
+        this.id = id;
+        this.nome = nome;
+        this.materia = materia;
+    }
+
+    public void addAlunos(Aluno newAluno){
+        alunos.add(newAluno);
+
+    }
 }

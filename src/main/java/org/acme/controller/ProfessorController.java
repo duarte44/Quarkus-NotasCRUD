@@ -10,6 +10,7 @@ import org.acme.exceptions.ResponseError;
 import org.acme.service.AlunoService;
 import org.acme.service.ProfessorService;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
@@ -59,6 +60,7 @@ public class ProfessorController {
     @DELETE
     @Path("{id}")
     @Transactional
+    @RolesAllowed("manager")
     public Response delete(@PathParam("id") Long id){
         var respo = professorService.findById(id);
 
@@ -71,6 +73,7 @@ public class ProfessorController {
 
     @POST
     @Transactional
+    @RolesAllowed("manager")
     public Response insert(ProfessorDTO objDTO){
 
         Professor obj = professorService.fromDTO(objDTO);
@@ -85,6 +88,7 @@ public class ProfessorController {
     @PUT
     @Path("{id}")
     @Transactional
+    @RolesAllowed("manager")
     public Response update(@PathParam("id")Long id, ProfessorDTO newProfessor){
         var respo = professorService.findById(id);
 
@@ -94,6 +98,24 @@ public class ProfessorController {
         }
 
         return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @PUT
+    @Path("{id}/{idAluno}")
+    @Transactional
+    @RolesAllowed("manager")
+    public Response alteraAluno(@PathParam("id")Long id, @PathParam("idAluno")Long idAluno){
+        var professor = professorService.findById(id);
+        var aluno = alunoService.findById(idAluno);
+
+        if(professor != null && aluno != null) {
+            professorService.alteraAluno(professor, aluno);
+
+            return Response.noContent().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+
     }
 
 

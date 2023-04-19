@@ -18,8 +18,6 @@ public class AlunoDTO {
     @NotBlank(message = "Nome não pode ser nulo ")
     private String nome;
 
-
-
     @NotNull(message = "Nota não pode ser nula")
     @Max(value = 10, message = "As notas devem estar entre 0 e 10")
     @Min(value = 0, message = "As notas devem estar entre 0 e 10")

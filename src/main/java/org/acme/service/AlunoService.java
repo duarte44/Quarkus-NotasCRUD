@@ -9,6 +9,7 @@ import org.acme.repositories.ProfessorRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,6 +62,8 @@ public class AlunoService {
         obj.setN2(newObj.getN2());
         obj.setN3(newObj.getN3());
     }
+
+
 
 
 }

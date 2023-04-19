@@ -7,11 +7,11 @@ import org.acme.entity.Professor;
 import org.acme.repositories.AlunoRepository;
 import org.acme.repositories.ProfessorRepository;
 
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @ApplicationScoped
@@ -19,9 +19,6 @@ public class ProfessorService {
 
     @Inject
     ProfessorRepository professorRepository;
-
-    @Inject
-    AlunoRepository alunoRepository;
 
     public void insert(Professor obj){
         obj.setId(null);
@@ -44,8 +41,7 @@ public class ProfessorService {
         var respo = professorRepository.deleteById(id);
         return Response.ok(respo).build();
 
-    }
-
+   }
     public Response update(Long id, ProfessorDTO newDTO){
         Professor obj = professorRepository.findById(id);
         updateData(newDTO, obj);
@@ -53,15 +49,20 @@ public class ProfessorService {
 
     }
 
-
     public static Professor fromDTO(ProfessorDTO objDto){
-        return new Professor(objDto.getId(), objDto.getNome(), objDto.getMateria(), objDto.getAlunos());
+        return new Professor(objDto.getId(), objDto.getNome(), objDto.getMateria());
     }
 
     private void updateData(ProfessorDTO newObj, Professor obj){
         obj.setNome(newObj.getNome());
         obj.setMateria(newObj.getMateria());
-        obj.setAlunos(newObj.getAlunos());
+    }
+
+    public Response alteraAluno(Professor professor, Aluno aluno){
+        aluno.setProfessor(professor);
+
+        return Response.noContent().build();
+
     }
 
 

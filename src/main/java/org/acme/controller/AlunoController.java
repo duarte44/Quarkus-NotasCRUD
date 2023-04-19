@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.acme.dto.AlunoDTO;
 import org.acme.entity.Aluno;
 import org.acme.exceptions.ResponseError;
+import org.acme.repositories.ProfessorRepository;
 import org.acme.service.AlunoService;
 import org.acme.service.ProfessorService;
 
@@ -34,20 +35,20 @@ public class AlunoController {
 
     @GET
     @Path("{id}")
-    public Response findById(@PathParam("id") Long id){
+    public Response findById(@PathParam("id") Long id) {
         var resposta = alunoService.findById(id);
-        if (resposta != null){
+        if (resposta != null) {
             return Response.ok(resposta).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
     @GET
-    public List<Aluno> retrieveCustomers(){
+    public List<Aluno> retrieveCustomers() {
         List<Aluno> alunos = new ArrayList<>();
         try {
             alunos = alunoService.findAll();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -58,16 +59,26 @@ public class AlunoController {
     @POST
     @Transactional
     @Path("{id}")
-    public Response insert(AlunoDTO objDTO, @PathParam("id") Long id){
+    public Response insert(AlunoDTO objDTO, @PathParam("id") Long id) {
+        var prof = professorService.findById(id);
 
-        Aluno obj = alunoService.fromDTO(objDTO);
-        Set<ConstraintViolation<AlunoDTO>> violations = validator.validate(objDTO);
-        if(!violations.isEmpty()){
-            return ResponseError.createFromValidation(violations).withStatusCode(ResponseError.UNPROCESSABLE_ENTITY_STATUS);
+        if (prof != null) {
+
+            Aluno obj = alunoService.fromDTO(objDTO);
+            Set<ConstraintViolation<AlunoDTO>> violations = validator.validate(objDTO);
+            if (!violations.isEmpty()) {
+                return ResponseError.createFromValidation(violations).withStatusCode(ResponseError.UNPROCESSABLE_ENTITY_STATUS);
+            } else {
+                alunoService.insert(obj, id);
+                return Response.status(Response.Status.CREATED.getStatusCode()).build();
+            }
         }
-        alunoService.insert(obj, id);
-        return Response.status(Response.Status.CREATED.getStatusCode()).build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
+
+
+
+
 
     @DELETE
     @Transactional
